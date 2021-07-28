@@ -16,3 +16,4 @@ The last step will work on a Mac. On other platforms, save the copied data into 
 cat [your file] | bin/parse-vfat-output.rb
 ```
 
+> The script will only output data for pools with a non-zero staked value
