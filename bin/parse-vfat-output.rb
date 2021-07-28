@@ -7,14 +7,14 @@ POOL_START = /^(\d+) - \[/
 POOL_END = "\n"
 
 class Pool
-  attr_reader :pool_id, :name, :tokens_staked, :usd_value, :day_apr
+  attr_reader :pool_id, :name, :tokens_staked, :usd_value, :day_apr, :rewards
 
   def initialize(text)
     parse text.split("\n")
   end
 
   def to_s
-    [name, tokens_staked, usd_value, day_apr].join("\t")
+    [name, tokens_staked, usd_value, rewards, day_apr].join("\t")
   end
 
   private
@@ -23,6 +23,7 @@ class Pool
     parse_header lines.first
     parse_value lines.grep(/You are staking/).first
     parse_apr lines.grep(/^APR/).first
+    parse_rewards lines.grep(/^Claim/).first
   end
 
   def parse_header(line)
@@ -44,6 +45,12 @@ class Pool
     end
   end
 
+  def parse_rewards(line)
+    if line =~ /Claim ([\d\.]+)/
+      @rewards = $1.to_f
+    end
+  end
+
 end
 
 ############################################################
@@ -62,7 +69,7 @@ while line = gets
   end
 end
 
-puts "Name\t\tTokens\tUSD\tAPR/day"
+puts "Name\t\tTokens\tUSD\tRewards\tAPR/day"
 pools.each do |text|
   p = Pool.new(text)
   puts p if p.usd_value > 0
