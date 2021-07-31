@@ -35,13 +35,13 @@ class Pool
   def parse_value(line)
     if line =~ /You are staking ([\d\.]+) .* \(\$(.*)\)/
       @tokens_staked = $1.to_f
-      @usd_value = $2.to_f
+      @usd_value = to_float($2)
     end
   end
 
   def parse_apr(line)
     if line =~ /APR: Day (.*?)%/
-      @day_apr = $1.to_f
+      @day_apr = to_float($1)
     end
   end
 
@@ -49,6 +49,10 @@ class Pool
     if line =~ /Claim ([\d\.]+)/
       @rewards = $1.to_f
     end
+  end
+
+  def to_float(str)
+    str.gsub(",", "").to_f
   end
 
 end
