@@ -9,11 +9,13 @@ def output_staked_pools(list)
   end
 end
 
-def output_highest_apr_pool(list)
-  p = list.sort { |a,b| a.day_apr <=> b.day_apr }
+def sort_by_apr(list)
+  list.sort { |a,b| a.day_apr <=> b.day_apr }
     .reverse
-    .first
+end
 
+def output_highest_apr_pool(list)
+  p = sort_by_apr(list).first
   puts "Highest (day) APR:"
   puts [p.name, p.day_apr].join(", ")
 end
